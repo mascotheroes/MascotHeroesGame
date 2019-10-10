@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Movement : MonoBehaviour {
 
@@ -14,7 +15,12 @@ public class Movement : MonoBehaviour {
 	public float jumpSpeed;
 	private bool movingRight;
 	private bool movingLeft;
-
+	private Touch touchOne;
+	private Touch touchTwo;
+	private float lastTouchOne;
+	private float lastTouchTwo;
+	public Text text;
+	public float jumpSwipeRequirement = 100;
 
 	// Use this for initialization
 	void Start () {
@@ -33,6 +39,23 @@ public class Movement : MonoBehaviour {
 				StartCoroutine ("Jump");
 			}
 		}
+		touchOne = Input.GetTouch (0);
+		if (lastTouchOne == 0) {
+			lastTouchOne = touchOne.position.y;
+		}
+		if (touchOne.position.y >= lastTouchOne + jumpSwipeRequirement) {
+			StartJump ();
+		}
+		lastTouchOne = touchOne.position.y;
+		touchTwo = Input.GetTouch (1);
+		if (lastTouchTwo == 0) {
+			lastTouchTwo = touchTwo.position.y;
+		}
+		if (touchTwo.position.y >= lastTouchTwo + jumpSwipeRequirement) {
+			StartJump ();
+		}
+		lastTouchTwo = touchTwo.position.y;
+		//text.text = ("Current: " + touchOne.position.y +" Last: " + lastTouchOne);
 	}
 
 	private IEnumerator Jump(){
